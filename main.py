@@ -1,17 +1,9 @@
 import streamlit as st
 import cohere
 import os
-from matplotlib import pyplot as plt
-from matplotlib import font_manager
-import numpy as np
 
 # Cohere APIキー（Secretsから取得）
 co = cohere.Client(os.getenv("COHERE_API_KEY"))
-
-# 日本語フォント設定
-font_path = os.path.join(os.path.dirname(__file__), "NotoSansJP-Regular.ttf")
-font_prop = font_manager.FontProperties(fname=font_path)
-plt.rcParams['font.family'] = font_prop.get_name()
 
 st.set_page_config(page_title="フラクタル心理診断 with 日本語フォント対応", page_icon="🧠")
 st.title("🧠 フラクタル心理診断 with 日本語フォント対応")
@@ -42,7 +34,7 @@ if submitted:
         response = co.generate(
             model="command-light",
             prompt=prompt,
-            max_tokens=300,
+            max_tokens=500,
             temperature=0.6
         )
 
@@ -50,15 +42,3 @@ if submitted:
 
         st.subheader("🧠 AIからの気づき")
         st.markdown(ai_comment)
-
-        # 感情バランス仮想推移図
-        st.subheader("📊 感情バランスの仮想推移")
-        fig, ax = plt.subplots()
-        x = np.arange(1, 4)
-        y = [1.8, 3.0, 2.2]  # サンプル数値
-        ax.plot(x, y, marker='o')
-        ax.set_title("感情バランスの仮想推移", fontproperties=font_prop)
-        ax.set_xticks([1, 2, 3])
-        ax.set_xticklabels(["不安", "怒り", "自己否定"], fontproperties=font_prop)
-        ax.set_ylabel("強さ (1~5)", fontproperties=font_prop)
-        st.pyplot(fig)
