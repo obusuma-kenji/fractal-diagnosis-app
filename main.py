@@ -4,19 +4,13 @@ import os
 from googletrans import Translator
 import re
 
-# 観念分類表（初期構成）
+# 観念分類表（承認欲求のみ精密対応）
 belief_patterns = {
     "承認欲求": {
-        "keywords": ["無視", "認められない", "評価", "伝わらない", "疎外"],
-        "message": "今回の出来事には、「私は認められるべきだ」という観念が背景にある可能性があります。相手の反応は、あなたが自分の価値を外からの評価に依存しているパターンを映しているかもしれません。"
-    },
-    "完璧主義": {
-        "keywords": ["ミス", "指摘", "責められた", "失敗", "恥ずかしい"],
-        "message": "この体験からは、「私は間違えてはいけない」という完璧主義の観念が見えてきます。自分のミスに過度に反応する傾向が、相手の態度に敏感に反応してしまったのかもしれません。"
-    },
-    "コントロール欲": {
-        "keywords": ["従わない", "勝手", "予定変更", "混乱", "無計画"],
-        "message": "今回のような状況には、「私は思い通りに進めたい」というコントロール欲の観念が関わっている可能性があります。状況が自分の枠を外れたとき、強い不快感として現れることがあります。"
+        "keywords": [
+            "無視", "認められない", "評価", "伝わらない", "疎外", "軽視", "過小評価", "意見が通らない", "反論された", "聞いてもらえない"
+        ],
+        "message": "この出来事には、「私は認められるべきだ」という観念が関係しているかもしれません。相手の態度や言動に強く反応した背景には、“自分の価値が受け入れられていないのでは”という不安が潜んでいた可能性があります。\nフラクタル心理学では、外の世界は内面の鏡です。この体験は、あなたが“自分で自分を認める力”を育てるための大切な気づきになるかもしれません。"
     }
 }
 
@@ -24,10 +18,11 @@ belief_patterns = {
 co = cohere.Client(os.getenv("COHERE_API_KEY"))
 translator = Translator()
 
-st.set_page_config(page_title="フラクタル心理診断 with 翻訳＆観念補完", page_icon="🧠")
-st.title("🧠 フラクタル心理診断")
+st.set_page_config(page_title="フラクタル心理診断（承認欲求補完）", page_icon="🧠")
+st.title("🧠 フラクタル心理診断 with 英語生成＋日本語翻訳＋承認欲求補完")
 st.markdown("""
 以下のフォームに、あなたが最近感じた「対人トラブル」を記入してください。
+英語でAIが分析を行い、日本語で自然な診断と「承認欲求」の観念が自動補完されます。
 """)
 
 with st.form("diagnosis_form"):
@@ -75,12 +70,12 @@ Here is the event:
         for key, value in replacements.items():
             modified_comment = re.sub(key, value, modified_comment)
 
-        # 観念自動補完の挿入
+        # 承認欲求だけに絞った補完
         belief_message = ""
-        for belief, content in belief_patterns.items():
-            if any(keyword in user_event for keyword in content["keywords"]):
-                belief_message = content["message"]
-                break
+        belief = "承認欲求"
+        content = belief_patterns[belief]
+        if any(keyword in user_event for keyword in content["keywords"]):
+            belief_message = content["message"]
 
         final_output = modified_comment + "\n\n🔍 フラクタル心理学的観点からの補足:\n" + belief_message if belief_message else modified_comment
 
