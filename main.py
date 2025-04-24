@@ -6,7 +6,6 @@ st.set_page_config(page_title="フラクタル心理診断（観念拡張＋投�
 st.title("🧠 フラクタル心理診断 〜 自分の観念に気づく対話体験")
 st.markdown("""
 以下の2つの質問に答えることで、あなたの内面にある観念のパターンが浮かび上がります。
-すべて日本語で入力してください。
 """)
 
 # 拡張版 観念分類辞書
@@ -50,7 +49,7 @@ def generate_diagnosis(trouble, feeling):
         projection = "\n今感じたことを、自分自身へのメッセージとして見直すことで、深い気づきが得られることもあります。"
         closing = "\n小さな違和感や感情も、自分と向き合う貴重なサインです。"
 
-    return f"🧠 AIからの気づき（日本語訳）\n\n{empathy}{insight}{projection}{closing}"
+    return f"🧠 AIからの気づき\n\n{empathy}{insight}{projection}{closing}"
 
 # フォーム入力
 with st.form("2step_form"):
