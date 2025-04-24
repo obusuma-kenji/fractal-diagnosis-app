@@ -26,24 +26,24 @@ with st.form("diagnosis_form"):
 if submitted:
     with st.spinner("AIカウンセラーが診断中です..."):
         prompt = f"""
-あなたはフラクタル心理学に基づくプロフェッショナルなカウンセラーです。
-以下の「対人トラブル」について、次の構成に従ってコメントをください：
+あなたは、フラクタル心理学に精通したカウンセラーです。
 
-1. 【分析】相手に感じた感情の背後にある「自分の観念」や「自己投影」
-2. 【気づき】自分の中にある思い込み・過去の経験の反映
-3. 【提案】今後どう思考を修正すれば、よりよい関係や現実が得られるか
+以下の「対人トラブル」について、次の3つの観点から、
+優しく断定的な口調でコメントしてください。
 
-敬語で、やさしく、クライアントの成長を応援する語り口でお願いします。
+1. 相手に感じた不快感の背景にある「自分の観念」や「自己投影」
+2. 自分の中にある思い込みや過去のパターンに気づかせる
+3. 今後どう観念を変えれば現実が変わるかの提案
 
 【トラブル内容】
 {user_event}
 """
 
         response = co.generate(
-            model="command",
+            model="command-light",
             prompt=prompt,
             max_tokens=300,
-            temperature=0.65
+            temperature=0.6
         )
 
         ai_comment = response.generations[0].text.strip()
@@ -62,4 +62,3 @@ if submitted:
         ax.set_xticklabels(["不安", "怒り", "自己否定"], fontproperties=font_prop)
         ax.set_ylabel("強さ (1~5)", fontproperties=font_prop)
         st.pyplot(fig)
-
