@@ -19,17 +19,19 @@ with st.form("diagnosis_form"):
     submitted = st.form_submit_button("🧠 診断する")
 
 if submitted:
-    with st.spinner("AIカウンセラーが英語で分析中です..."):
+    with st.spinner("AIカウンセラーが診断中です..."):
         prompt = f"""
 You are a counselor trained in Fractal Psychology.
 
-Please respond to the following interpersonal conflict in English, following these three parts:
+Please respond to the following interpersonal conflict in English, following these three steps:
 
-1. Analysis: What belief or projection of the client may have led to this conflict?
-2. Awareness: What past experience or misunderstanding has shaped that belief?
-3. Suggestion: How can the client reframe the belief to improve their current reality?
+1. Description: Briefly describe what happened.
+2. Reflection: How did the client feel about it, and what was their internal emotional reaction?
+3. Fractal Insight & Suggestion: From a Fractal Psychology perspective, what unconscious patterns, projections, or inner beliefs does this event reflect? What growth or healing opportunity is available to the client?
 
-Here is the conflict:
+Respond in a warm, empathic, and professional tone, in 300–500 characters.
+
+Here is the event:
 {user_event}
 """
 
