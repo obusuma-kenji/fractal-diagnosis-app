@@ -31,7 +31,7 @@ if submitted:
 日本語で優しく、深い気づきを与えるアドバイスを生成してください。
 """
         try:
-            response = co.generate(model="command-r", prompt=prompt, max_tokens=500)
+            response = co.generate(model="command", prompt=prompt, max_tokens=500)
             st.success("診断が完了しました！")
             st.markdown("### 🧠 AIからの気づき")
             st.markdown(response.generations[0].text.strip())
