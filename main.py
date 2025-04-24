@@ -2,7 +2,7 @@ import streamlit as st
 import os
 import re
 
-st.set_page_config(page_title="フラクタル心理診断（観念拡張版）", page_icon="🧠")
+st.set_page_config(page_title="フラクタル心理診断（観念拡張＋投影原理対応）", page_icon="🧠")
 st.title("🧠 フラクタル心理診断 〜 自分の観念に気づく対話体験")
 st.markdown("""
 以下の2つの質問に答えることで、あなたの内面にある観念のパターンが浮かび上がります。
@@ -34,7 +34,7 @@ def supplement_kannen(feeling_text):
             supplemented.append(kannen)
     return supplemented
 
-# 診断コメント生成
+# 診断コメント生成（構文：共感 → 観念 → 解釈 → 提案）
 def generate_diagnosis(trouble, feeling):
     empathy = f"あなたが感じた『{feeling}』という感情は、とても自然なものです。"
     kannen_list = supplement_kannen(feeling)
@@ -43,12 +43,14 @@ def generate_diagnosis(trouble, feeling):
         insight = "\n\nこの出来事を通じて見えてくる観念には、以下のようなものがあるかもしれません：\n"
         for k in kannen_list:
             insight += f"- {k}\n"
-        closing = "\nこれらの観念は、これまでの経験や思い込みから生まれてきたかもしれません。\n気づいた今こそ、自分をもっと自由にしていくチャンスです。"
+        projection = "\n相手に対して強く感じたことは、実はあなた自身が自分に向けていた言葉かもしれません。\nフラクタル心理学では、他人は自分の内面を映す鏡だと考えます。"
+        closing = "\nこの出来事を機に、『他人にどう見られるか』ではなく、『自分は自分をどう思っているか』に意識を向けてみましょう。"
     else:
         insight = "\n\n今回の感情には、あなた独自の価値観や過去の経験が強く影響しているかもしれません。"
-        closing = "\nこの気づきから、新たな行動や思考の選択が生まれる可能性があります。"
+        projection = "\n今感じたことを、自分自身へのメッセージとして見直すことで、深い気づきが得られることもあります。"
+        closing = "\n小さな違和感や感情も、自分と向き合う貴重なサインです。"
 
-    return f"🧠 AIからの気づき（日本語訳）\n\n{empathy}{insight}{closing}"
+    return f"🧠 AIからの気づき（日本語訳）\n\n{empathy}{insight}{projection}{closing}"
 
 # フォーム入力
 with st.form("2step_form"):
