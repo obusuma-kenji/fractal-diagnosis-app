@@ -2,27 +2,34 @@ import streamlit as st
 import os
 import re
 
-st.set_page_config(page_title="フラクタル心理診断（日本語・2段階入力版）", page_icon="🧠")
+st.set_page_config(page_title="フラクタル心理診断（観念拡張版）", page_icon="🧠")
 st.title("🧠 フラクタル心理診断 〜 自分の観念に気づく対話体験")
 st.markdown("""
 以下の2つの質問に答えることで、あなたの内面にある観念のパターンが浮かび上がります。
 すべて日本語で入力してください。
 """)
 
-# 観念分類表（簡易）
-kannen_table = {
-    "無視": "私は大切にされないという観念",
-    "イライラ": "思い通りにいかないと不安になるという観念",
-    "悲しみ": "自分の価値が他人に左右されるという観念",
-    "不安": "失敗したら愛されないという観念",
-    "評価されない": "結果を出せないと認められないという観念"
-}
+# 拡張版 観念分類辞書
+def get_kannen_table():
+    return {
+        "無視": "私は大切にされないという観念",
+        "イライラ": "思い通りにいかないと不安になるという観念",
+        "焦り": "早く結果を出さないと認められないという観念",
+        "恥ずかしさ": "失敗＝価値がないという思い込み",
+        "怒り": "自分はもっと尊重されるべきという観念",
+        "悲しみ": "人にわかってもらえない寂しさという観念",
+        "不安": "相手に合わせないと嫌われるかもしれないという観念",
+        "悔しさ": "自分の実力が正当に評価されていないという観念",
+        "孤独": "どうせ一人では何もできないという無意識の思い",
+        "安心": "コントロールできる環境だけが安全という観念",
+        "あきらめ": "自分の努力はどうせ報われないという信念"
+    }
 
 # 感情文から観念を補完する
 
 def supplement_kannen(feeling_text):
     supplemented = []
-    for keyword, kannen in kannen_table.items():
+    for keyword, kannen in get_kannen_table().items():
         if keyword in feeling_text:
             supplemented.append(kannen)
     return supplemented
@@ -33,15 +40,15 @@ def generate_diagnosis(trouble, feeling):
     kannen_list = supplement_kannen(feeling)
 
     if kannen_list:
-        insight = "この出来事を通じて見えてくる観念には、以下のようなものがあるかもしれません：\n"
+        insight = "\n\nこの出来事を通じて見えてくる観念には、以下のようなものがあるかもしれません：\n"
         for k in kannen_list:
             insight += f"- {k}\n"
+        closing = "\nこれらの観念は、これまでの経験や思い込みから生まれてきたかもしれません。\n気づいた今こそ、自分をもっと自由にしていくチャンスです。"
     else:
-        insight = "今回の感情には、あなた独自の価値観や経験が反応しているかもしれません。"
+        insight = "\n\n今回の感情には、あなた独自の価値観や過去の経験が強く影響しているかもしれません。"
+        closing = "\nこの気づきから、新たな行動や思考の選択が生まれる可能性があります。"
 
-    closing = "この出来事は、あなたが自分の内面にある観念に気づき、\n自分自身をより深く理解するきっかけになるかもしれません。"
-
-    return f"🧠 AIからの気づき（日本語訳）\n\n{empathy}\n\n{insight}\n\n{closing}"
+    return f"🧠 AIからの気づき（日本語訳）\n\n{empathy}{insight}{closing}"
 
 # フォーム入力
 with st.form("2step_form"):
